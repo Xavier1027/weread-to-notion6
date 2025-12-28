@@ -50,6 +50,15 @@ export async function syncAllBooks(
     // 遍历所有书籍并同步
     for (let i = 0; i < mergedBooks.length; i++) {
       const book = mergedBooks[i];
+
+      // --- 新增：只同步已读完的书籍 (进度 < 100 则跳过) ---
+      if (book.progress < 100) {
+        console.log(`\n[${i + 1}/${mergedBooks.length}] 跳过《${book.title}》: 当前进度 ${book.progress}%，未读完。`);
+        skippedCount++; // 计入跳过统计
+        continue;       // 直接跳到下一本书
+      }
+      // --- 新增结束 ---
+      
       console.log(
         `\n[${i + 1}/${mergedBooks.length}] 同步《${book.title}》...`
       );
